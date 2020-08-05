@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugTracker", "BugTracker\BugTracker.csproj", "{0678B8E2-BE3F-4F59-9948-F0447C4F053B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugTrackerData", "BugTrackerData\BugTrackerData.csproj", "{39B0D13C-71F3-4D39-9418-0349565D747E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0678B8E2-BE3F-4F59-9948-F0447C4F053B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0678B8E2-BE3F-4F59-9948-F0447C4F053B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0678B8E2-BE3F-4F59-9948-F0447C4F053B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39B0D13C-71F3-4D39-9418-0349565D747E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39B0D13C-71F3-4D39-9418-0349565D747E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39B0D13C-71F3-4D39-9418-0349565D747E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39B0D13C-71F3-4D39-9418-0349565D747E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
