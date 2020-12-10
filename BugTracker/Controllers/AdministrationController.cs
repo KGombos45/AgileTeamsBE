@@ -28,7 +28,6 @@ namespace BugTracker.Controllers
         }               
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         [Route("Users")]
         //GET : /api/Administration/Users
         public async Task<IActionResult> GetUserProfiles()
@@ -45,7 +44,7 @@ namespace BugTracker.Controllers
 
                 var model = new ApplicationUserModel
                 {
-                    Id = user.Id,
+                    ID = user.Id,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,

@@ -32,7 +32,8 @@ namespace BugTrackerData.Models
         public DateTime CreatedOn { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
-        public DateTime? UpdatedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public string ModifiedBy { get; set; }
 
         public ICollection<TaskComment> Comments { get; set; }
 

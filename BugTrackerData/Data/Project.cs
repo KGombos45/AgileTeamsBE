@@ -10,7 +10,7 @@ namespace BugTrackerData.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string ProjectId { get; set; }
+        public string ProjectID { get; set; }
         [Column(TypeName = "nvarchar(120)")]
         [Required]
         public string ProjectName { get; set; }
