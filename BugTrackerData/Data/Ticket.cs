@@ -7,32 +7,32 @@ using System.Text;
 
 namespace BugTrackerData.Models
 {
-    public class ProjectTask
+    public class Ticket
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string TicketID { get; set; }
         [Column(TypeName = "nvarchar(120)")]
         [Required]
-        public string TicketTitle { get; set; }
+        public string TicketName { get; set; }
         [Column(TypeName = "nvarchar(MAX)")]
         public string TicketDescription { get; set; }
-        public string AssignedTo { get; set; }
-        public string Submitter { get; set; }
+        public string CreatedBy { get; set; }
+        [ForeignKey("TicketStatus")]
+        public int TicketStatusID { get; set; }
+        public TicketStatus TicketStatus { get; set; }
+        [ForeignKey("TicketOwner")]
+        public string TicketOwnerID { get; set; }
+        public ApplicationUser TicketOwner { get; set; }
+        [ForeignKey("TicketProject")]
+        public string TicketProjectID { get; set; }
+        public Project TicketProject { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public DateTime CreatedOn { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public DateTime? UpdatedOn { get; set; }
-        [DataType(DataType.Date)]
-        [Column(TypeName = "Date")]
-        public DateTime? ClosedOn { get; set; }
-
-        public virtual Project Project { get; set; }
-        public virtual ApplicationUser User { get; set; }
-        public virtual ProjectTaskStatus Status { get; set; }
-        public virtual ProjectTaskPriority Priority { get; set; }
 
         public ICollection<TaskComment> Comments { get; set; }
 

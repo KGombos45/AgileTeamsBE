@@ -7,6 +7,7 @@ using BugTrackerData.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker.Controllers
 {
@@ -28,29 +29,7 @@ namespace BugTracker.Controllers
         [Route("Create")]
         //POST: api/Project/Create
         public async Task<ActionResult<Project>> CreateProject(Project project)
-        {
-            var statuses = _context.ProjectStatuses.ToList();
-            var users = _context.ApplicationUsers.ToList(); ;
-
-
-            foreach (var status in statuses)
-            {
-                if (status.ProjectStatusId == project.ProjectStatus.ProjectStatusId)
-                {
-                    project.ProjectStatus = status;
-                }
-            }
-
-            foreach (var user in users)
-            {
-                if (user.Id == project.ProjectOwner.Id)
-                {
-                    project.ProjectOwner = user;
-                }
-            }
-
-
-
+        {                                          
             await _context.Projects.AddAsync(project);
             await _context.SaveChangesAsync();
 
@@ -62,10 +41,8 @@ namespace BugTracker.Controllers
         //PUT : /api/Project/UpdateProject
         public async Task<IActionResult> UpdateProject(Project project)
         {
-            var user = await _userManager.FindByIdAsync(project.ProjectOwner.Id);
+            project.ProjectOwner = await _userManager.FindByIdAsync(project.ProjectOwnerID);
            
-            project.ProjectOwner = user;
-
             _context.Projects.Update(project);
             await _context.SaveChangesAsync();
 
@@ -99,9 +76,11 @@ namespace BugTracker.Controllers
         //GET : /api/Project/Projects
         public async Task<IActionResult> GetProjects()
         {
-            var projects = _context.Projects.ToList();
-            var statuses = _context.ProjectStatuses.ToList();
-            var users = _context.ApplicationUsers.ToList(); ; 
+            var projects = _context.Projects.Include(p => p.ProjectStatus)
+                .Include(p => p.ProjectOwner)
+                .Include(p => p.Tickets).ThenInclude(t => t.TicketOwner)
+                .Include(p => p.Tickets).ThenInclude(t => t.TicketStatus);
+
 
             return Ok(projects);
 

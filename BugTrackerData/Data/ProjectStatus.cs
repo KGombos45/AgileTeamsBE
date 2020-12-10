@@ -8,7 +8,7 @@ namespace BugTrackerData.Models
     public class ProjectStatus
     {
         [Key]
-        public int ProjectStatusId { get; set; }
-        public string ProjectStatusName { get; set; }
+        public int StatusID { get; set; }
+        public string StatusName { get; set; }
     }
 }

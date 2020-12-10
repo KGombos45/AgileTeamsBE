@@ -5,11 +5,11 @@ using System.Text;
 
 namespace BugTrackerData.Models
 {
-    public class ProjectTaskStatus
+    public class TicketStatus
     {
         [Key]
-        public int ProjectStatusId { get; set; }
+        public int StatusID { get; set; }
         [Required]
-        public string ProjectStatusName { get; set; }
+        public string StatusName { get; set; }
     }
 }

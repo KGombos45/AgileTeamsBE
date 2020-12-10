@@ -16,7 +16,11 @@ namespace BugTrackerData.Models
         public string ProjectName { get; set; }
         [Column(TypeName = "nvarchar(MAX)")]
         public string ProjectDescription { get; set; }
+        [ForeignKey("ProjectStatus")]
+        public int ProjectStatusID { get; set; }
         public ProjectStatus ProjectStatus { get; set; }
+        [ForeignKey("ProjectOwner")]
+        public string ProjectOwnerID { get; set; }
         public ApplicationUser ProjectOwner { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
@@ -35,7 +39,7 @@ namespace BugTrackerData.Models
         [Column(TypeName = "Date")]
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
-        public virtual IEnumerable<ProjectTask> Tasks { get; set; }
+        public virtual IEnumerable<Ticket> Tickets { get; set; }
 
     }
 }

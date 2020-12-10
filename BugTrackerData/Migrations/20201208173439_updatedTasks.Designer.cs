@@ -4,14 +4,16 @@ using BugTrackerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BugTrackerData.Migrations
 {
     [DbContext(typeof(BugTrackerContext))]
-    partial class BugTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20201208173439_updatedTasks")]
+    partial class updatedTasks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,9 +141,9 @@ namespace BugTrackerData.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(120)");
 
-                    b.Property<string>("ProjectOwnerID");
+                    b.Property<string>("ProjectOwnerId");
 
-                    b.Property<int>("ProjectStatusID");
+                    b.Property<int?>("ProjectStatusId");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("Date");
@@ -151,24 +153,77 @@ namespace BugTrackerData.Migrations
 
                     b.HasKey("ProjectId");
 
-                    b.HasIndex("ProjectOwnerID");
+                    b.HasIndex("ProjectOwnerId");
 
-                    b.HasIndex("ProjectStatusID");
+                    b.HasIndex("ProjectStatusId");
 
                     b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("BugTrackerData.Models.ProjectStatus", b =>
                 {
-                    b.Property<int>("StatusID")
+                    b.Property<int>("ProjectStatusId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("StatusName");
+                    b.Property<string>("ProjectStatusName");
 
-                    b.HasKey("StatusID");
+                    b.HasKey("ProjectStatusId");
 
                     b.ToTable("ProjectStatuses");
+                });
+
+            modelBuilder.Entity("BugTrackerData.Models.ProjectTask", b =>
+                {
+                    b.Property<string>("TicketID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("Date");
+
+                    b.Property<string>("ProjectId");
+
+                    b.Property<int?>("StatusProjectStatusId");
+
+                    b.Property<string>("TicketDescription")
+                        .HasColumnType("nvarchar(MAX)");
+
+                    b.Property<string>("TicketName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<string>("TicketOwner");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("Date");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("TicketID");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("StatusProjectStatusId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProjectTasks");
+                });
+
+            modelBuilder.Entity("BugTrackerData.Models.ProjectTaskStatus", b =>
+                {
+                    b.Property<int>("ProjectStatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ProjectStatusName")
+                        .IsRequired();
+
+                    b.HasKey("ProjectStatusId");
+
+                    b.ToTable("ProjectTaskStatuses");
                 });
 
             modelBuilder.Entity("BugTrackerData.Models.ProjectTaskStatusLog", b =>
@@ -178,17 +233,17 @@ namespace BugTrackerData.Migrations
 
                     b.Property<DateTime>("LogDate");
 
-                    b.Property<int?>("StatusID");
+                    b.Property<string>("ProjectTaskTicketID");
 
-                    b.Property<string>("TicketID");
+                    b.Property<int?>("StatusProjectStatusId");
 
                     b.Property<string>("UserId");
 
                     b.HasKey("ProjectTaskStatusId");
 
-                    b.HasIndex("StatusID");
+                    b.HasIndex("ProjectTaskTicketID");
 
-                    b.HasIndex("TicketID");
+                    b.HasIndex("StatusProjectStatusId");
 
                     b.HasIndex("UserId");
 
@@ -207,69 +262,18 @@ namespace BugTrackerData.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(MAX)");
 
-                    b.Property<string>("SubmittedBy");
+                    b.Property<string>("ProjectTaskTicketID");
 
-                    b.Property<string>("TicketID");
+                    b.Property<string>("SubmittedBy");
 
                     b.Property<DateTime>("Updated")
                         .HasColumnType("Date");
 
                     b.HasKey("CommentID");
 
-                    b.HasIndex("TicketID");
+                    b.HasIndex("ProjectTaskTicketID");
 
                     b.ToTable("TaskComments");
-                });
-
-            modelBuilder.Entity("BugTrackerData.Models.Ticket", b =>
-                {
-                    b.Property<string>("TicketID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("Date");
-
-                    b.Property<string>("TicketDescription")
-                        .HasColumnType("nvarchar(MAX)");
-
-                    b.Property<string>("TicketName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(120)");
-
-                    b.Property<string>("TicketOwnerID");
-
-                    b.Property<string>("TicketProjectID");
-
-                    b.Property<int>("TicketStatusID");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("Date");
-
-                    b.HasKey("TicketID");
-
-                    b.HasIndex("TicketOwnerID");
-
-                    b.HasIndex("TicketProjectID");
-
-                    b.HasIndex("TicketStatusID");
-
-                    b.ToTable("Tickets");
-                });
-
-            modelBuilder.Entity("BugTrackerData.Models.TicketStatus", b =>
-                {
-                    b.Property<int>("StatusID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("StatusName")
-                        .IsRequired();
-
-                    b.HasKey("StatusID");
-
-                    b.ToTable("TicketStatuses");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -390,23 +394,37 @@ namespace BugTrackerData.Migrations
                 {
                     b.HasOne("BugTrackerData.Models.ApplicationUser", "ProjectOwner")
                         .WithMany()
-                        .HasForeignKey("ProjectOwnerID");
+                        .HasForeignKey("ProjectOwnerId");
 
                     b.HasOne("BugTrackerData.Models.ProjectStatus", "ProjectStatus")
                         .WithMany()
-                        .HasForeignKey("ProjectStatusID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectStatusId");
+                });
+
+            modelBuilder.Entity("BugTrackerData.Models.ProjectTask", b =>
+                {
+                    b.HasOne("BugTrackerData.Models.Project", "Project")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("BugTrackerData.Models.ProjectTaskStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusProjectStatusId");
+
+                    b.HasOne("BugTrackerData.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("BugTrackerData.Models.ProjectTaskStatusLog", b =>
                 {
-                    b.HasOne("BugTrackerData.Models.TicketStatus", "Status")
+                    b.HasOne("BugTrackerData.Models.ProjectTask", "ProjectTask")
                         .WithMany()
-                        .HasForeignKey("StatusID");
+                        .HasForeignKey("ProjectTaskTicketID");
 
-                    b.HasOne("BugTrackerData.Models.Ticket", "Ticket")
+                    b.HasOne("BugTrackerData.Models.ProjectTaskStatus", "Status")
                         .WithMany()
-                        .HasForeignKey("TicketID");
+                        .HasForeignKey("StatusProjectStatusId");
 
                     b.HasOne("BugTrackerData.Models.ApplicationUser", "User")
                         .WithMany()
@@ -415,25 +433,9 @@ namespace BugTrackerData.Migrations
 
             modelBuilder.Entity("BugTrackerData.Models.TaskComment", b =>
                 {
-                    b.HasOne("BugTrackerData.Models.Ticket")
+                    b.HasOne("BugTrackerData.Models.ProjectTask")
                         .WithMany("Comments")
-                        .HasForeignKey("TicketID");
-                });
-
-            modelBuilder.Entity("BugTrackerData.Models.Ticket", b =>
-                {
-                    b.HasOne("BugTrackerData.Models.ApplicationUser", "TicketOwner")
-                        .WithMany()
-                        .HasForeignKey("TicketOwnerID");
-
-                    b.HasOne("BugTrackerData.Models.Project", "TicketProject")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TicketProjectID");
-
-                    b.HasOne("BugTrackerData.Models.TicketStatus", "TicketStatus")
-                        .WithMany()
-                        .HasForeignKey("TicketStatusID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectTaskTicketID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

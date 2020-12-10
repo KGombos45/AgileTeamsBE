@@ -16,8 +16,8 @@ namespace BugTrackerData
 
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectStatus> ProjectStatuses { get; set; }
-        public DbSet<ProjectTask> ProjectTasks { get; set; }
-        public DbSet<ProjectTaskStatus> ProjectTaskStatuses { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketStatus> TicketStatuses { get; set; }
         public DbSet<ProjectTaskPriority> ProjectTaskPriorities { get; set; }
         public DbSet<ProjectTaskStatusLog> ProjectTaskStatusLogs { get; set; }
         public DbSet<TaskComment> TaskComments { get; set; }
