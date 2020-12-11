@@ -4,14 +4,16 @@ using BugTrackerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BugTrackerData.Migrations
 {
     [DbContext(typeof(BugTrackerContext))]
-    partial class BugTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20201211092754_updatedModels7")]
+    partial class updatedModels7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,6 +200,8 @@ namespace BugTrackerData.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("Date");
 
+                    b.Property<string>("ProjectID");
+
                     b.Property<string>("TicketDescription")
                         .HasColumnType("nvarchar(MAX)");
 
@@ -214,6 +218,8 @@ namespace BugTrackerData.Migrations
                     b.Property<string>("TicketWorkItemID");
 
                     b.HasKey("TicketID");
+
+                    b.HasIndex("ProjectID");
 
                     b.HasIndex("TicketOwnerID");
 
@@ -458,6 +464,10 @@ namespace BugTrackerData.Migrations
 
             modelBuilder.Entity("BugTrackerData.Models.Ticket", b =>
                 {
+                    b.HasOne("BugTrackerData.Data.Project")
+                        .WithMany("Tickets")
+                        .HasForeignKey("ProjectID");
+
                     b.HasOne("BugTrackerData.Models.ApplicationUser", "TicketOwner")
                         .WithMany()
                         .HasForeignKey("TicketOwnerID");

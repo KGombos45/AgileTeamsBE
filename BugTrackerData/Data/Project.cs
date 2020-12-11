@@ -1,45 +1,24 @@
-﻿using System;
+﻿using BugTrackerData.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace BugTrackerData.Models
+namespace BugTrackerData.Data
 {
     public class Project
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ProjectID { get; set; }
-        [Column(TypeName = "nvarchar(120)")]
-        [Required]
         public string ProjectName { get; set; }
-        [Column(TypeName = "nvarchar(MAX)")]
-        public string ProjectDescription { get; set; }
-        [ForeignKey("ProjectStatus")]
-        public int ProjectStatusID { get; set; }
-        public ProjectStatus ProjectStatus { get; set; }
-        [ForeignKey("ProjectOwner")]
-        public string ProjectOwnerID { get; set; }
-        public ApplicationUser ProjectOwner { get; set; }
-        [DataType(DataType.Date)]
-        [Column(TypeName = "Date")]
-        public DateTime? StartDate { get; set; }
-        [DataType(DataType.Date)]
-        [Column(TypeName = "Date")]
-        public DateTime? TargetEndDate { get; set; }
-        [DataType(DataType.Date)]
-        [Column(TypeName = "Date")]
-        public DateTime? ActualEndDate { get; set; }
+        public string Description { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
-        [DataType(DataType.Date)]
-        [Column(TypeName = "Date")]
-        public DateTime? ModifiedOn { get; set; }
-        public string ModifiedBy { get; set; }
-        public virtual IEnumerable<Ticket> Tickets { get; set; }
 
+        public virtual IEnumerable<WorkItem> WorkItems { get; set; }
     }
 }

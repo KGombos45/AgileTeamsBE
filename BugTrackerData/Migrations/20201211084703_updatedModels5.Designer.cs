@@ -4,14 +4,16 @@ using BugTrackerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BugTrackerData.Migrations
 {
     [DbContext(typeof(BugTrackerContext))]
-    partial class BugTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20201211084703_updatedModels5")]
+    partial class updatedModels5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,13 +25,6 @@ namespace BugTrackerData.Migrations
                 {
                     b.Property<string>("ProjectID")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("Date");
-
-                    b.Property<string>("Description");
 
                     b.Property<string>("ProjectName");
 
@@ -198,6 +193,8 @@ namespace BugTrackerData.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("Date");
 
+                    b.Property<string>("ProjectID");
+
                     b.Property<string>("TicketDescription")
                         .HasColumnType("nvarchar(MAX)");
 
@@ -207,21 +204,23 @@ namespace BugTrackerData.Migrations
 
                     b.Property<string>("TicketOwnerID");
 
+                    b.Property<string>("TicketProjectID");
+
                     b.Property<int>("TicketStatusID");
 
                     b.Property<int>("TicketTypeID");
 
-                    b.Property<string>("TicketWorkItemID");
-
                     b.HasKey("TicketID");
 
+                    b.HasIndex("ProjectID");
+
                     b.HasIndex("TicketOwnerID");
+
+                    b.HasIndex("TicketProjectID");
 
                     b.HasIndex("TicketStatusID");
 
                     b.HasIndex("TicketTypeID");
-
-                    b.HasIndex("TicketWorkItemID");
 
                     b.ToTable("Tickets");
                 });
@@ -458,9 +457,17 @@ namespace BugTrackerData.Migrations
 
             modelBuilder.Entity("BugTrackerData.Models.Ticket", b =>
                 {
+                    b.HasOne("BugTrackerData.Data.Project")
+                        .WithMany("Tickets")
+                        .HasForeignKey("ProjectID");
+
                     b.HasOne("BugTrackerData.Models.ApplicationUser", "TicketOwner")
                         .WithMany()
                         .HasForeignKey("TicketOwnerID");
+
+                    b.HasOne("BugTrackerData.Models.WorkItem", "TicketProject")
+                        .WithMany("Tickets")
+                        .HasForeignKey("TicketProjectID");
 
                     b.HasOne("BugTrackerData.Models.TicketStatus", "TicketStatus")
                         .WithMany()
@@ -471,10 +478,6 @@ namespace BugTrackerData.Migrations
                         .WithMany()
                         .HasForeignKey("TicketTypeID")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BugTrackerData.Models.WorkItem", "TicketWorkItem")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TicketWorkItemID");
                 });
 
             modelBuilder.Entity("BugTrackerData.Models.WorkItem", b =>

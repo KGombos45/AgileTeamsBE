@@ -21,12 +21,15 @@ namespace BugTrackerData.Models
         [ForeignKey("TicketStatus")]
         public int TicketStatusID { get; set; }
         public TicketStatus TicketStatus { get; set; }
+        [ForeignKey("TicketType")]
+        public int TicketTypeID { get; set; }
+        public TicketType TicketType { get; set; }
         [ForeignKey("TicketOwner")]
         public string TicketOwnerID { get; set; }
         public ApplicationUser TicketOwner { get; set; }
-        [ForeignKey("TicketProject")]
-        public string TicketProjectID { get; set; }
-        public Project TicketProject { get; set; }
+        [ForeignKey("TicketWorkItem")]
+        public string TicketWorkItemID { get; set; }
+        public WorkItem TicketWorkItem { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public DateTime CreatedOn { get; set; }

@@ -67,9 +67,20 @@ namespace BugTracker.Controllers
         //GET : /api/Project/Statuses
         public async Task<IActionResult> GetStatuses()
         {
-            var Statuses = _context.TicketStatuses.ToList();
+            var statuses = _context.TicketStatuses.ToList();
 
-            return Ok(Statuses);
+            return Ok(statuses);
+
+        }
+
+        [HttpGet]
+        [Route("Types")]
+        //GET : /api/Ticket/Types
+        public async Task<IActionResult> GetTypes()
+        {
+            var types = _context.TicketTypes.ToList();
+
+            return Ok(types);
 
         }
 
@@ -80,8 +91,9 @@ namespace BugTracker.Controllers
         public IActionResult GetTickets(string userId)
         {
             var tickets =  _context.Tickets.Include(t => t.TicketOwner)
-                                            .Include(t => t.TicketProject)
+                                            .Include(t => t.TicketWorkItem)
                                             .Include(t => t.TicketStatus)
+                                            .Include(t => t.TicketType)
                                             .Where(t => t.TicketOwnerID.Equals(userId)).ToList();
 
             return Ok(tickets);

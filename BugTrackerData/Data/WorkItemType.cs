@@ -5,11 +5,11 @@ using System.Text;
 
 namespace BugTrackerData.Data
 {
-    public class ProjectTaskPriority
+    public class WorkItemType
     {
         [Key]
-        public int ProjectPriorityId { get; set; }
+        public int TypeID { get; set; }
         [Required]
-        public string ProjectPriorityName { get; set; }
+        public string TypeName { get; set; }
     }
 }
