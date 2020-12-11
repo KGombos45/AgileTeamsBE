@@ -100,5 +100,24 @@ namespace BugTracker.Controllers
             return Ok(workItems);
 
         }
+
+        [HttpGet]
+        [Route("WorkItems/{userId}")]
+        //GET : /api/WorkItem/WorkItems
+        public async Task<IActionResult> GetUserWorkItems(string userId)
+        {
+            var workItems = _context.WorkItems                
+                .Include(w => w.Project)
+                .Include(w => w.WorkItemStatus)
+                .Include(w => w.WorkItemType)
+                .Include(w => w.WorkItemOwner)
+                .Include(w => w.Tickets).ThenInclude(t => t.TicketOwner)
+                .Include(w => w.Tickets).ThenInclude(t => t.TicketStatus)
+                .Where(w => w.WorkItemOwnerID.Equals(userId));
+
+
+            return Ok(workItems);
+
+        }
     }
 }

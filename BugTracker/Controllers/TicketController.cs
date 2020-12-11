@@ -84,11 +84,24 @@ namespace BugTracker.Controllers
 
         }
 
+        [HttpGet]
+        [Route("Tickets")]
+        //GET : /api/Ticket/Tickets
+        public IActionResult GetTickets()
+        {
+            var tickets = _context.Tickets.Include(t => t.TicketOwner)
+                                            .Include(t => t.TicketWorkItem)
+                                            .Include(t => t.TicketStatus)
+                                            .Include(t => t.TicketType).ToList();
+                                            
+
+            return Ok(tickets);
+        }
 
         [HttpGet]
         [Route("Tickets/{userId}")]
         //GET : /api/Ticket/Tickets
-        public IActionResult GetTickets(string userId)
+        public IActionResult GetUserTickets(string userId)
         {
             var tickets =  _context.Tickets.Include(t => t.TicketOwner)
                                             .Include(t => t.TicketWorkItem)
