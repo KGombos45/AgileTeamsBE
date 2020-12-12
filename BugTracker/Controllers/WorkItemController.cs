@@ -96,6 +96,23 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
+        [Route("Users/{workItemID}")]
+        //GET : /api/WorkItem/Users
+        public async Task<IActionResult> GetUsers(string workItemID, WorkItem workItem)
+        {
+            List<ApplicationUser> users = new List<ApplicationUser>();
+
+            users.Add(workItem.WorkItemOwner);
+
+            foreach (var ticket in workItem.Tickets)
+            {
+                users.Add(ticket.TicketOwner);
+            }
+
+            return Ok(users);
+        }
+
+        [HttpGet]
         [Route("WorkItems")]
         //GET : /api/WorkItem/WorkItems
         public async Task<IActionResult> GetWorkItems()

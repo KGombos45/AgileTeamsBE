@@ -313,9 +313,6 @@ namespace BugTrackerData.Migrations
                     b.Property<DateTime>("SubmittedOn")
                         .HasColumnType("Date");
 
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("Date");
-
                     b.HasKey("CommentID");
 
                     b.HasIndex("CommentWorkItemID");

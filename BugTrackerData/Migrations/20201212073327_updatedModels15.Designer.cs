@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BugTrackerData.Migrations
 {
     [DbContext(typeof(BugTrackerContext))]
-    [Migration("20201212072333_updatedModels15")]
+    [Migration("20201212073327_updatedModels15")]
     partial class updatedModels15
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -313,9 +313,6 @@ namespace BugTrackerData.Migrations
                     b.Property<string>("SubmittedBy");
 
                     b.Property<DateTime>("SubmittedOn")
-                        .HasColumnType("Date");
-
-                    b.Property<DateTime>("Updated")
                         .HasColumnType("Date");
 
                     b.HasKey("CommentID");

@@ -12,11 +12,10 @@ namespace BugTrackerData.Migrations
                 columns: table => new
                 {
                     CommentID = table.Column<string>(nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(MAX)", nullable: true),
-                    SubmittedBy = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(MAX)", nullable: false),
+                    SubmittedBy = table.Column<string>(nullable: false),
                     SubmittedOn = table.Column<DateTime>(type: "Date", nullable: false),
-                    Updated = table.Column<DateTime>(type: "Date", nullable: false),
-                    CommentWorkItemID = table.Column<string>(nullable: true)
+                    CommentWorkItemID = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

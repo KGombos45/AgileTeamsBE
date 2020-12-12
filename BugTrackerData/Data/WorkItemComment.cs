@@ -17,9 +17,6 @@ namespace BugTrackerData.Models
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public DateTime SubmittedOn { get; set; }
-        [DataType(DataType.Date)]
-        [Column(TypeName = "Date")]
-        public DateTime Updated { get; set; }
         [ForeignKey("WorkItem")]
         public string CommentWorkItemID { get; set; }
         public WorkItem WorkItem { get; set; }
