@@ -6,19 +6,23 @@ using System.Text;
 
 namespace BugTrackerData.Models
 {
-    public class TaskComment
+    public class WorkItemComment
     {
         [Key]
-        public int CommentID { get; set; }
-        public string SubmittedBy { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string CommentID { get; set; }
         [Column(TypeName = "nvarchar(MAX)")]
-        public string Details { get; set; }
+        public string Comment { get; set; }
+        public string SubmittedBy { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
-        public DateTime Created { get; set; }
+        public DateTime SubmittedOn { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public DateTime Updated { get; set; }
+        [ForeignKey("WorkItem")]
+        public string CommentWorkItemID { get; set; }
+        public WorkItem WorkItem { get; set; }
 
     }
 }

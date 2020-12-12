@@ -54,6 +54,7 @@ namespace BugTracker.Controllers
         [Route("DeleteWorkItem")]
         public async Task<IActionResult> DeleteWorkItem(WorkItem workItem)
         {
+            _context.WorkItemComments.RemoveRange(workItem.Comments);
             _context.Tickets.RemoveRange(workItem.Tickets);
             _context.WorkItems.Remove(workItem);
             await _context.SaveChangesAsync();
@@ -84,6 +85,17 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
+        [Route("Priorities")]
+        //GET : /api/WorkItem/Priorities
+        public async Task<IActionResult> GetPriorities()
+        {
+            var priorities = _context.WorkItemPriorities.ToList();
+
+            return Ok(priorities);
+
+        }
+
+        [HttpGet]
         [Route("WorkItems")]
         //GET : /api/WorkItem/WorkItems
         public async Task<IActionResult> GetWorkItems()
@@ -93,6 +105,8 @@ namespace BugTracker.Controllers
                 .Include(w => w.WorkItemStatus)
                 .Include(w => w.WorkItemType)
                 .Include(w => w.WorkItemOwner)
+                .Include(w => w.WorkItemPriority)
+                .Include(w => w.Comments)
                 .Include(w => w.Tickets).ThenInclude(t => t.TicketOwner)
                 .Include(w => w.Tickets).ThenInclude(t => t.TicketStatus);
 
@@ -106,11 +120,13 @@ namespace BugTracker.Controllers
         //GET : /api/WorkItem/WorkItems
         public async Task<IActionResult> GetUserWorkItems(string userId)
         {
-            var workItems = _context.WorkItems                
+            var workItems = _context.WorkItems
                 .Include(w => w.Project)
                 .Include(w => w.WorkItemStatus)
                 .Include(w => w.WorkItemType)
                 .Include(w => w.WorkItemOwner)
+                .Include(w => w.WorkItemPriority)
+                .Include(w => w.Comments)
                 .Include(w => w.Tickets).ThenInclude(t => t.TicketOwner)
                 .Include(w => w.Tickets).ThenInclude(t => t.TicketStatus)
                 .Where(w => w.WorkItemOwnerID.Equals(userId));

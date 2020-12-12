@@ -4,14 +4,16 @@ using BugTrackerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BugTrackerData.Migrations
 {
     [DbContext(typeof(BugTrackerContext))]
-    partial class BugTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20201212062830_updatedModels11")]
+    partial class updatedModels11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,8 +302,9 @@ namespace BugTrackerData.Migrations
 
             modelBuilder.Entity("BugTrackerData.Models.WorkItemComment", b =>
                 {
-                    b.Property<string>("CommentID")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("CommentID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(MAX)");
@@ -313,12 +316,16 @@ namespace BugTrackerData.Migrations
                     b.Property<DateTime>("SubmittedOn")
                         .HasColumnType("Date");
 
+                    b.Property<string>("TicketID");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("Date");
 
                     b.HasKey("CommentID");
 
                     b.HasIndex("CommentWorkItemID");
+
+                    b.HasIndex("TicketID");
 
                     b.ToTable("WorkItemComments");
                 });
@@ -518,6 +525,10 @@ namespace BugTrackerData.Migrations
                     b.HasOne("BugTrackerData.Models.WorkItem", "WorkItem")
                         .WithMany("Comments")
                         .HasForeignKey("CommentWorkItemID");
+
+                    b.HasOne("BugTrackerData.Models.Ticket")
+                        .WithMany("Comments")
+                        .HasForeignKey("TicketID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

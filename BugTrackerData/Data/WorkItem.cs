@@ -26,6 +26,9 @@ namespace BugTrackerData.Models
         [ForeignKey("WorkItemType")]
         public int WorkItemTypeID { get; set; }
         public WorkItemType WorkItemType { get; set; }
+        [ForeignKey("WorkItemPriority")]
+        public int WorkItemPriorityID { get; set; }
+        public WorkItemPriority WorkItemPriority { get; set; }
         [ForeignKey("WorkItemOwner")]
         public string WorkItemOwnerID { get; set; }
         public ApplicationUser WorkItemOwner { get; set; }
@@ -46,6 +49,8 @@ namespace BugTrackerData.Models
         [Column(TypeName = "Date")]
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
+
+        public virtual IEnumerable<WorkItemComment> Comments { get; set; }
         public virtual IEnumerable<Ticket> Tickets { get; set; }
 
     }

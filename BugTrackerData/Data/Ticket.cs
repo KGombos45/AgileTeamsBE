@@ -38,7 +38,5 @@ namespace BugTrackerData.Models
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
 
-        public ICollection<TaskComment> Comments { get; set; }
-
     }
 }
