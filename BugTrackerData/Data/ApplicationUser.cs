@@ -16,6 +16,6 @@ namespace BugTrackerData.Models
         public string City { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
-        public string About { get; set; }
+        public string About { get; set; }        
     }
 }

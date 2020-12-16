@@ -23,12 +23,14 @@ namespace BugTracker.Controllers
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationSettings _applicationSettings;
+        private readonly BugTrackerContext _context;
 
-        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<ApplicationSettings> applicationSettings)
+        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<ApplicationSettings> applicationSettings, BugTrackerContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _applicationSettings = applicationSettings.Value;
+            _context = context;
         }
         
 
@@ -70,7 +72,24 @@ namespace BugTracker.Controllers
 
                 // Get user assigned role
                 var role = await _userManager.GetRolesAsync(applicationUser);
-                IdentityOptions _options = new IdentityOptions();
+                IdentityOptions _options = new IdentityOptions();               
+
+                if (!ApplicationUserExists(applicationUser.Id))
+                {
+                    var applicationUserRole = new ApplicationUserRole()
+                    {
+                        ID = applicationUser.Id,
+                        UserName = applicationUser.UserName,
+                        FirstName = applicationUser.FirstName,
+                        LastName = applicationUser.LastName,
+                        Email = applicationUser.Email,
+                        Role = role.FirstOrDefault()
+                    };
+
+                    await _context.ApplicationUserRoles.AddAsync(applicationUserRole);
+                    await _context.SaveChangesAsync();
+                }
+
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -92,6 +111,11 @@ namespace BugTracker.Controllers
             {
                 return BadRequest(new { message = "Username or password is incorrect." });
             }
+        }
+
+        private bool ApplicationUserExists(string ID)
+        {
+            return _context.ApplicationUserRoles.Any(u => u.ID == ID);
         }
     }
 }

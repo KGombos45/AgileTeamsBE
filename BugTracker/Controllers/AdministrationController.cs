@@ -32,38 +32,9 @@ namespace BugTracker.Controllers
         //GET : /api/Administration/Users
         public async Task<IActionResult> GetUserProfiles()
         {
-            var usersList = await _context.ApplicationUsers.ToListAsync();
+            var usersList = await _context.ApplicationUserRoles.ToListAsync();
 
-            ApplicationUsersAndRoleModel ApplicationUserModel = new ApplicationUsersAndRoleModel();
-
-            List<ApplicationUserModel> AllUsersAndRole = new List<ApplicationUserModel>();
-
-            foreach (var user in usersList)
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-
-                var model = new ApplicationUserModel
-                {
-                    ID = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    UserName = user.UserName,
-                    Address = user.Address,
-                    City = user.City,
-                    State = user.State,
-                    Zip = user.Zip,
-                    About = user.About,           
-                    Role = roles.FirstOrDefault()
-            };
-
-                AllUsersAndRole.Add(model);
-
-            }
-
-            ApplicationUserModel.UsersAndRole = AllUsersAndRole;
-
-            return Ok(ApplicationUserModel.UsersAndRole);
+            return Ok(usersList);
 
         }
 
@@ -71,10 +42,10 @@ namespace BugTracker.Controllers
         [Route("UpdateRole/{id}")]
         [Authorize(Roles = "Admin")]
         //PUT : /api/Administration/
-        public async Task<IActionResult> UpdateUserRole(string id, ApplicationUserModel applicationUserModel)
+        public async Task<IActionResult> UpdateUserRole(string id, ApplicationUserRole applicationUserRole)
         {
             var user = await _userManager.FindByIdAsync(id);
-            var role = await _roleManager.FindByNameAsync(applicationUserModel.Role);
+            var role = await _roleManager.FindByNameAsync(applicationUserRole.Role);
             var oldRoles = await _userManager.GetRolesAsync(user);
 
             if (role == null)
@@ -87,6 +58,9 @@ namespace BugTracker.Controllers
             if (oldRoles != null)
             {            
                 result = await _userManager.RemoveFromRolesAsync(user, oldRoles.ToArray());
+
+                _context.ApplicationUserRoles.Update(applicationUserRole);
+
                 if (result.Succeeded)
                 {
                     result = await _userManager.AddToRoleAsync(user, role.Name);
@@ -103,9 +77,13 @@ namespace BugTracker.Controllers
         [HttpPost]
         [Route("DeleteUser/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteUser(string id)
+        public async Task<IActionResult> DeleteUser(string id, ApplicationUserRole applicationUserRole)
         {
             var user = await _userManager.FindByIdAsync(id);
+
+            _context.ApplicationUserRoles.Remove(applicationUserRole);
+
+            _context.SaveChanges();
 
             if (user == null)
             {

@@ -4,14 +4,16 @@ using BugTrackerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BugTrackerData.Migrations
 {
     [DbContext(typeof(BugTrackerContext))]
-    partial class BugTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20201214162220_datetodatetime3")]
+    partial class datetodatetime3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,22 +137,40 @@ namespace BugTrackerData.Migrations
 
             modelBuilder.Entity("BugTrackerData.Models.ApplicationUserRole", b =>
                 {
-                    b.Property<string>("ID")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<string>("RoleId");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("RoleName");
 
-                    b.Property<string>("LastName");
-
-                    b.Property<string>("Role");
-
-                    b.Property<string>("UserName");
-
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("ApplicationUserRoles");
+                });
+
+            modelBuilder.Entity("BugTrackerData.Models.ProjectTaskStatusLog", b =>
+                {
+                    b.Property<string>("ProjectTaskStatusId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("LogDate");
+
+                    b.Property<int?>("StatusID");
+
+                    b.Property<string>("TicketID");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("ProjectTaskStatusId");
+
+                    b.HasIndex("StatusID");
+
+                    b.HasIndex("TicketID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProjectTaskStatusLogs");
                 });
 
             modelBuilder.Entity("BugTrackerData.Models.Ticket", b =>
@@ -321,6 +341,8 @@ namespace BugTrackerData.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -331,6 +353,8 @@ namespace BugTrackerData.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -430,9 +454,24 @@ namespace BugTrackerData.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BugTrackerData.Models.ProjectTaskStatusLog", b =>
+                {
+                    b.HasOne("BugTrackerData.Models.TicketStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusID");
+
+                    b.HasOne("BugTrackerData.Models.Ticket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketID");
+
+                    b.HasOne("BugTrackerData.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("BugTrackerData.Models.Ticket", b =>
                 {
-                    b.HasOne("BugTrackerData.Models.ApplicationUserRole", "TicketOwner")
+                    b.HasOne("BugTrackerData.Models.ApplicationUser", "TicketOwner")
                         .WithMany()
                         .HasForeignKey("TicketOwnerID");
 
@@ -453,7 +492,7 @@ namespace BugTrackerData.Migrations
 
             modelBuilder.Entity("BugTrackerData.Models.WorkItem", b =>
                 {
-                    b.HasOne("BugTrackerData.Models.ApplicationUserRole", "WorkItemOwner")
+                    b.HasOne("BugTrackerData.Models.ApplicationUser", "WorkItemOwner")
                         .WithMany()
                         .HasForeignKey("WorkItemOwnerID");
 
@@ -482,6 +521,13 @@ namespace BugTrackerData.Migrations
                     b.HasOne("BugTrackerData.Models.WorkItem", "WorkItem")
                         .WithMany("Comments")
                         .HasForeignKey("CommentWorkItemID");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.HasOne("BugTrackerData.Models.ApplicationUser")
+                        .WithMany("Roles")
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

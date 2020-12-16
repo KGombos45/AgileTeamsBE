@@ -36,13 +36,22 @@ namespace BugTracker.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("AddComment")]
+        //POST: api/WorkItem/AddComment
+        public async Task<ActionResult<WorkItem>> CreateComment(WorkItemComment workItemComment)
+        {
+            await _context.WorkItemComments.AddAsync(workItemComment);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [HttpPut]
         [Route("updateWorkItem")]
         //PUT : /api/WorkItem/Update
         public async Task<IActionResult> UpdateWorkItem(WorkItem workItem)
         {
-            workItem.WorkItemOwner = await _userManager.FindByIdAsync(workItem.WorkItemOwnerID);
-           
             _context.WorkItems.Update(workItem);
             await _context.SaveChangesAsync();
 
@@ -96,23 +105,6 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
-        [Route("Users/{workItemID}")]
-        //GET : /api/WorkItem/Users
-        public async Task<IActionResult> GetUsers(string workItemID, WorkItem workItem)
-        {
-            List<ApplicationUser> users = new List<ApplicationUser>();
-
-            users.Add(workItem.WorkItemOwner);
-
-            foreach (var ticket in workItem.Tickets)
-            {
-                users.Add(ticket.TicketOwner);
-            }
-
-            return Ok(users);
-        }
-
-        [HttpGet]
         [Route("WorkItems")]
         //GET : /api/WorkItem/WorkItems
         public async Task<IActionResult> GetWorkItems()
@@ -126,6 +118,7 @@ namespace BugTracker.Controllers
                 .Include(w => w.Comments)
                 .Include(w => w.Tickets).ThenInclude(t => t.TicketOwner)
                 .Include(w => w.Tickets).ThenInclude(t => t.TicketStatus);
+
 
 
             return Ok(workItems);

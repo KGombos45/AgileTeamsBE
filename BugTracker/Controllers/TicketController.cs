@@ -43,8 +43,6 @@ namespace BugTracker.Controllers
         //PUT : /api/Ticket/UpdateTicket
         public async Task<IActionResult> UpdateTicket(Ticket ticket)
         {
-            ticket.TicketOwner = await _userManager.FindByIdAsync(ticket.TicketOwnerID);
-
             _context.Tickets.Update(ticket);
             await _context.SaveChangesAsync();
 

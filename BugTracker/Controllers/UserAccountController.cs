@@ -30,28 +30,69 @@ namespace BugTracker.Controllers
         [HttpGet]
         [Authorize]
         //Get : /api/UserAccount
-        public async Task<Object> GetUserAccount()
+        public async Task<IActionResult> GetUserAccount()
         {
             string userId = User.Claims.First(x => x.Type == "UserID").Value;
             var user = await _userManager.FindByIdAsync(userId);
             var roles = await _userManager.GetRolesAsync(user);
 
-            return new
+            var applicationUser = new ApplicationUserModel
             {
-                user.Id,
-                user.FirstName,
-                user.LastName,
-                user.Email,
-                user.UserName,
-                user.Address,
-                user.City,
-                user.State,
-                user.Zip,
-                user.About,
-                role = roles.FirstOrDefault()
-        };
+                ID = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                UserName = user.UserName,
+                Address = user.Address,
+                City = user.City,
+                State = user.State,
+                Zip = user.Zip,
+                About = user.About,
+                Role = roles.FirstOrDefault()
+            };
+
+            return Ok(applicationUser);
 
         }
+
+        [HttpGet]
+        [Route("GetProjectUserProfile/{userId}")]
+        //Get : /api/UserAccount/UserProfile/
+        public async Task<IActionResult> GetProjectUserProfile(string userId)
+        {          
+            var user = await _userManager.FindByIdAsync(userId);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var applicationUser = new ApplicationUserModel
+            {
+                ID = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                UserName = user.UserName,
+                Address = user.Address,
+                City = user.City,
+                State = user.State,
+                Zip = user.Zip,
+                About = user.About,
+                Role = roles.FirstOrDefault()
+            };
+
+            return Ok(applicationUser);
+
+        }
+
+        //[HttpGet]
+        //[Authorize]
+        ////Get : /api/UserAccountAndRole
+        //public async Task<IActionResult> GetUserAccountAndRole()
+        //{
+        //    string userId = User.Claims.First(x => x.Type == "UserID").Value;
+        //    var user = _context.ApplicationUserRoles.Where(u => u.ID.Equals(userId));
+
+        //    return Ok(user);
+
+        //}
 
         [HttpPut("{id}")]
         //Put : /api/UserAccount/id

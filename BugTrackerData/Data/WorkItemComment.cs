@@ -14,8 +14,8 @@ namespace BugTrackerData.Models
         [Column(TypeName = "nvarchar(MAX)")]
         public string Comment { get; set; }
         public string SubmittedBy { get; set; }
-        [DataType(DataType.Date)]
-        [Column(TypeName = "Date")]
+        [DataType(DataType.DateTime)]
+        [Column(TypeName = "DateTime")]
         public DateTime SubmittedOn { get; set; }
         [ForeignKey("WorkItem")]
         public string CommentWorkItemID { get; set; }

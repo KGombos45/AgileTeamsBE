@@ -20,18 +20,14 @@ namespace BugTrackerData.Models
         [ForeignKey("Project")]
         public string WorkItemProjectID { get; set; }
         public Project Project { get; set; }
-        [ForeignKey("WorkItemStatus")]
         public int WorkItemStatusID { get; set; }
         public WorkItemStatus WorkItemStatus { get; set; }
-        [ForeignKey("WorkItemType")]
         public int WorkItemTypeID { get; set; }
         public WorkItemType WorkItemType { get; set; }
-        [ForeignKey("WorkItemPriority")]
         public int WorkItemPriorityID { get; set; }
         public WorkItemPriority WorkItemPriority { get; set; }
-        [ForeignKey("WorkItemOwner")]
         public string WorkItemOwnerID { get; set; }
-        public ApplicationUser WorkItemOwner { get; set; }
+        public ApplicationUserRole WorkItemOwner { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public DateTime? StartDate { get; set; }

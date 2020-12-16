@@ -4,14 +4,16 @@ using BugTrackerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BugTrackerData.Migrations
 {
     [DbContext(typeof(BugTrackerContext))]
-    partial class BugTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20201215191949_datetodatetime8")]
+    partial class datetodatetime8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,6 +153,30 @@ namespace BugTrackerData.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("ApplicationUserRoles");
+                });
+
+            modelBuilder.Entity("BugTrackerData.Models.ProjectTaskStatusLog", b =>
+                {
+                    b.Property<string>("ProjectTaskStatusId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("LogDate");
+
+                    b.Property<int?>("StatusID");
+
+                    b.Property<string>("TicketID");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("ProjectTaskStatusId");
+
+                    b.HasIndex("StatusID");
+
+                    b.HasIndex("TicketID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProjectTaskStatusLogs");
                 });
 
             modelBuilder.Entity("BugTrackerData.Models.Ticket", b =>
@@ -428,6 +454,21 @@ namespace BugTrackerData.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BugTrackerData.Models.ProjectTaskStatusLog", b =>
+                {
+                    b.HasOne("BugTrackerData.Models.TicketStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusID");
+
+                    b.HasOne("BugTrackerData.Models.Ticket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketID");
+
+                    b.HasOne("BugTrackerData.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("BugTrackerData.Models.Ticket", b =>

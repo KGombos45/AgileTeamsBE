@@ -4,39 +4,22 @@ using BugTrackerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BugTrackerData.Migrations
 {
     [DbContext(typeof(BugTrackerContext))]
-    partial class BugTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20201216161813_clearforeignkeys")]
+    partial class clearforeignkeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("BugTrackerData.Data.Project", b =>
-                {
-                    b.Property<string>("ProjectID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("Date");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("ProjectName");
-
-                    b.HasKey("ProjectID");
-
-                    b.ToTable("Projects");
-                });
 
             modelBuilder.Entity("BugTrackerData.Data.WorkItemPriority", b =>
                 {
@@ -153,49 +136,6 @@ namespace BugTrackerData.Migrations
                     b.ToTable("ApplicationUserRoles");
                 });
 
-            modelBuilder.Entity("BugTrackerData.Models.Ticket", b =>
-                {
-                    b.Property<string>("TicketID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("Date");
-
-                    b.Property<string>("ModifiedBy");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("Date");
-
-                    b.Property<string>("TicketDescription")
-                        .HasColumnType("nvarchar(MAX)");
-
-                    b.Property<string>("TicketName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(120)");
-
-                    b.Property<string>("TicketOwnerID");
-
-                    b.Property<int>("TicketStatusID");
-
-                    b.Property<int>("TicketTypeID");
-
-                    b.Property<string>("TicketWorkItemID");
-
-                    b.HasKey("TicketID");
-
-                    b.HasIndex("TicketOwnerID");
-
-                    b.HasIndex("TicketStatusID");
-
-                    b.HasIndex("TicketTypeID");
-
-                    b.HasIndex("TicketWorkItemID");
-
-                    b.ToTable("Tickets");
-                });
-
             modelBuilder.Entity("BugTrackerData.Models.TicketStatus", b =>
                 {
                     b.Property<int>("StatusID")
@@ -224,62 +164,6 @@ namespace BugTrackerData.Migrations
                     b.ToTable("TicketTypes");
                 });
 
-            modelBuilder.Entity("BugTrackerData.Models.WorkItem", b =>
-                {
-                    b.Property<string>("WorkItemID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime?>("ActualEndDate")
-                        .HasColumnType("Date");
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("Date");
-
-                    b.Property<string>("ModifiedBy");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("Date");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("Date");
-
-                    b.Property<DateTime?>("TargetEndDate")
-                        .HasColumnType("Date");
-
-                    b.Property<string>("WorkItemDescription")
-                        .HasColumnType("nvarchar(MAX)");
-
-                    b.Property<string>("WorkItemName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(120)");
-
-                    b.Property<string>("WorkItemOwnerID");
-
-                    b.Property<int>("WorkItemPriorityID");
-
-                    b.Property<string>("WorkItemProjectID");
-
-                    b.Property<int>("WorkItemStatusID");
-
-                    b.Property<int>("WorkItemTypeID");
-
-                    b.HasKey("WorkItemID");
-
-                    b.HasIndex("WorkItemOwnerID");
-
-                    b.HasIndex("WorkItemPriorityID");
-
-                    b.HasIndex("WorkItemProjectID");
-
-                    b.HasIndex("WorkItemStatusID");
-
-                    b.HasIndex("WorkItemTypeID");
-
-                    b.ToTable("WorkItems");
-                });
-
             modelBuilder.Entity("BugTrackerData.Models.WorkItemComment", b =>
                 {
                     b.Property<string>("CommentID")
@@ -296,8 +180,6 @@ namespace BugTrackerData.Migrations
                         .HasColumnType("DateTime");
 
                     b.HasKey("CommentID");
-
-                    b.HasIndex("CommentWorkItemID");
 
                     b.ToTable("WorkItemComments");
                 });
@@ -428,60 +310,6 @@ namespace BugTrackerData.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("BugTrackerData.Models.Ticket", b =>
-                {
-                    b.HasOne("BugTrackerData.Models.ApplicationUserRole", "TicketOwner")
-                        .WithMany()
-                        .HasForeignKey("TicketOwnerID");
-
-                    b.HasOne("BugTrackerData.Models.TicketStatus", "TicketStatus")
-                        .WithMany()
-                        .HasForeignKey("TicketStatusID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BugTrackerData.Models.TicketType", "TicketType")
-                        .WithMany()
-                        .HasForeignKey("TicketTypeID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BugTrackerData.Models.WorkItem", "TicketWorkItem")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TicketWorkItemID");
-                });
-
-            modelBuilder.Entity("BugTrackerData.Models.WorkItem", b =>
-                {
-                    b.HasOne("BugTrackerData.Models.ApplicationUserRole", "WorkItemOwner")
-                        .WithMany()
-                        .HasForeignKey("WorkItemOwnerID");
-
-                    b.HasOne("BugTrackerData.Data.WorkItemPriority", "WorkItemPriority")
-                        .WithMany()
-                        .HasForeignKey("WorkItemPriorityID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BugTrackerData.Data.Project", "Project")
-                        .WithMany("WorkItems")
-                        .HasForeignKey("WorkItemProjectID");
-
-                    b.HasOne("BugTrackerData.Models.WorkItemStatus", "WorkItemStatus")
-                        .WithMany()
-                        .HasForeignKey("WorkItemStatusID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BugTrackerData.Data.WorkItemType", "WorkItemType")
-                        .WithMany()
-                        .HasForeignKey("WorkItemTypeID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("BugTrackerData.Models.WorkItemComment", b =>
-                {
-                    b.HasOne("BugTrackerData.Models.WorkItem", "WorkItem")
-                        .WithMany("Comments")
-                        .HasForeignKey("CommentWorkItemID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

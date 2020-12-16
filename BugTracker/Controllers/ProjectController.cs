@@ -60,6 +60,7 @@ namespace BugTracker.Controllers
             }
 
             _context.WorkItems.RemoveRange(project.WorkItems);
+
             _context.Projects.Remove(project);
 
             await _context.SaveChangesAsync();
@@ -73,11 +74,18 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> GetProjects()
         {
             var projects = _context.Projects
-                .Include(p => p.WorkItems).ThenInclude(w => w.Tickets);
+                .Include(p => p.WorkItems).ThenInclude(w => w.Tickets)
+                .Include(p => p.WorkItems).ThenInclude(w => w.WorkItemStatus)
+                .Include(p => p.WorkItems).ThenInclude(w => w.WorkItemOwner)
+                .Include(p => p.WorkItems).ThenInclude(w => w.Comments)
+                .Include(p => p.WorkItems).ThenInclude(w => w.WorkItemType)
+                .Include(p => p.WorkItems).ThenInclude(w => w.Project)
+                .Include(p => p.WorkItems).ThenInclude(w => w.WorkItemPriority).ToList();     
 
 
             return Ok(projects);
 
         }
+
     }
 }

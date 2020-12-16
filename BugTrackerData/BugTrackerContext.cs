@@ -2,6 +2,7 @@
 using BugTrackerData.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
 using System;
 
 namespace BugTrackerData
@@ -11,9 +12,7 @@ namespace BugTrackerData
         public BugTrackerContext(DbContextOptions<BugTrackerContext> options) : base(options) {  }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
         public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
-
         public DbSet<WorkItem> WorkItems { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<WorkItemStatus> WorkItemStatuses { get; set; }
@@ -24,6 +23,5 @@ namespace BugTrackerData
         public DbSet<WorkItemType> WorkItemTypes { get; set; }
         public DbSet<TicketType> TicketTypes { get; set; }
 
-        public DbSet<ProjectTaskStatusLog> ProjectTaskStatusLogs { get; set; }
     }
 }
