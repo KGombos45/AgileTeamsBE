@@ -125,6 +125,68 @@ namespace BugTracker.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("GetWorkItemStatusCount")]
+        //GET : /api/WorkItem/GetWorkItemStatusCounts
+        public async Task<IActionResult> GetWorkItemStatusCount()
+        {
+
+            var counts = _context.WorkItems.Select(x => x.WorkItemStatus).GroupBy(i => i.StatusName).ToDictionary(g => g.Key, g => g.Count());
+
+            var list = new List<Array>();
+
+            foreach (var count in counts)
+            {
+                object[] countString = new object[] { count.Key, count.Value };
+
+                list.Add(countString.ToArray());
+            }
+
+            return Ok(list);
+        }
+
+
+        [HttpGet]
+        [Route("GetWorkItemPriorityCount")]
+        //GET : /api/WorkItem/GetWorkItemPriorityCounts
+        public async Task<IActionResult> GetWorkItemPriorityCount()
+        {
+
+            var counts = _context.WorkItems.Select(x => x.WorkItemPriority).GroupBy(i => i.PriorityName).ToDictionary(g => g.Key, g => g.Count());
+
+            var list = new List<Array>();
+
+            foreach (var count in counts)
+            {
+                object[] countString = new object[] { count.Key, count.Value };
+
+                list.Add(countString.ToArray());
+            }
+
+            return Ok(list);
+        }
+
+        [HttpGet]
+        [Route("GetWorkItemOwnerCount")]
+        //GET : /api/WorkItem/GetWorkItemOwnerCounts
+        public async Task<IActionResult> GetWorkItemOwnerCount()
+        {
+
+            var counts = _context.WorkItems.Select(x => x.WorkItemOwner).GroupBy(i => i.UserName).ToDictionary(g => g.Key, g => g.Count());
+
+            var list = new List<Array>();
+
+            foreach (var count in counts)
+            {
+                object[] countString = new object[] { count.Key, count.Value };
+
+                list.Add(countString.ToArray());
+            }
+
+            return Ok(list);
+        }
+
         [HttpGet]
         [Route("WorkItems/{userId}")]
         //GET : /api/WorkItem/WorkItems

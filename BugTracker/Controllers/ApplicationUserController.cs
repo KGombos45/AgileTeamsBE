@@ -98,7 +98,7 @@ namespace BugTracker.Controllers
                         new Claim("UserID",applicationUser.Id.ToString()),
                         new Claim(_options.ClaimsIdentity.RoleClaimType, role.FirstOrDefault())
                     }),
-                    Expires = DateTime.UtcNow.AddMinutes(5),
+                    Expires = DateTime.UtcNow.AddMinutes(20),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_applicationSettings.JWT_Token)), SecurityAlgorithms.HmacSha256Signature)
                 };
 

@@ -82,6 +82,69 @@ namespace BugTracker.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("GetTicketStatusCount")]
+        //GET : /api/Ticket/GetTicketStatusCount
+        public async Task<IActionResult> GetTicketStatusCount()
+        {
+
+            var counts = _context.Tickets.Select(x => x.TicketStatus).GroupBy(i => i.StatusName).ToDictionary(g => g.Key, g => g.Count());
+
+            var list = new List<Array>();
+
+            foreach (var count in counts)
+            {
+                object[] countString = new object[] { count.Key, count.Value };
+
+                list.Add(countString.ToArray());
+            }
+
+            return Ok(list);
+        }
+
+
+        [HttpGet]
+        [Route("GetTicketTypeCount")]
+        //GET : /api/Ticket/GetTicketTypeCount
+        public async Task<IActionResult> GetTicketTypeCount()
+        {
+
+            var counts = _context.Tickets.Select(x => x.TicketType).GroupBy(i => i.TypeName).ToDictionary(g => g.Key, g => g.Count());
+
+            var list = new List<Array>();
+
+            foreach (var count in counts)
+            {
+                object[] countString = new object[] { count.Key, count.Value };
+
+                list.Add(countString.ToArray());
+            }
+
+            return Ok(list);
+        }
+
+
+        [HttpGet]
+        [Route("GetTicketOwnerCount")]
+        //GET : /api/Ticket/GetTicketOwnerCount
+        public async Task<IActionResult> GetTicketOwnerCount()
+        {
+
+            var counts = _context.Tickets.Select(x => x.TicketOwner).GroupBy(i => i.UserName).ToDictionary(g => g.Key, g => g.Count());
+
+            var list = new List<Array>();
+
+            foreach (var count in counts)
+            {
+                object[] countString = new object[] { count.Key, count.Value };
+
+                list.Add(countString.ToArray());
+            }
+
+            return Ok(list);
+        }
+
         [HttpGet]
         [Route("Tickets")]
         //GET : /api/Ticket/Tickets
